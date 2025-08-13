@@ -3,6 +3,9 @@
 	let todos: any[] = [];
 	let newTitle = '';
 
+	$: console.log('DB URL:', import.meta.env.VITE_TURSO_DATABASE_URL);
+	$: console.log('Auth Token present:', !!import.meta.env.VITE_TURSO_AUTH_TOKEN);
+
 	async function loadTodos() {
 		const res = await fetch('/api/todos');
 		todos = await res.json();
