@@ -1,21 +1,13 @@
 // src/lib/db.ts
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
+// Use static private env vars so values are embedded at build time
 import { TURSO_DATABASE_URL, TURSO_AUTH_TOKEN } from '$env/static/private';
+import { createClient } from '@libsql/client';
 
-// Use server-side environment variables
-const url = TURSO_DATABASE_URL;
-const authToken = TURSO_AUTH_TOKEN;
-
-if (!url) {
-    console.error("TURSO_DATABASE_URL is missing");
-    throw new Error("TURSO_DATABASE_URL is missing");
+if (!TURSO_DATABASE_URL || !TURSO_AUTH_TOKEN) {
+	throw new Error('Missing TURSO_DATABASE_URL or TURSO_AUTH_TOKEN in environment variables');
 }
 
-if (!authToken) {
-    console.error("TURSO_AUTH_TOKEN is missing");
-    throw new Error("TURSO_AUTH_TOKEN is missing");
-}
-
-const client = createClient({ url, authToken });
-export const db = drizzle(client);
+export const db = createClient({
+	url: TURSO_DATABASE_URL,
+	authToken: TURSO_AUTH_TOKEN
+});
